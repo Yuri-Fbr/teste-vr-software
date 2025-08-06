@@ -1,6 +1,9 @@
 from unittest.mock import AsyncMock
 
+import pytest
+
 from src.notification.entity import Notification
+from src.notification.exception import NotificationNotFoundError
 from src.notification.repository import NotificationRepository
 from src.notification.schema import CreateNotificationInput
 from src.notification.service import NotificationService
@@ -24,3 +27,26 @@ async def test_create_notification_usecase(
 
     assert created_notification.trace_id is not None
     assert created_notification.message_id is not None
+
+
+async def test_find_notification_usecase(
+    notification: Notification,
+    notification_usecase: NotificationUsecase,
+    notification_repository: NotificationRepository,
+) -> None:
+    notification_repository.find = AsyncMock(return_value=notification)
+    result = await notification_usecase.find_notification(notification.trace_id)
+
+    assert result is not None
+
+
+async def test_find_notification_usecase_not_found(
+    notification_usecase: NotificationUsecase,
+    notification_repository: NotificationRepository,
+) -> None:
+    notification_repository.find = AsyncMock(return_value=None)
+
+    with pytest.raises(NotificationNotFoundError) as error:
+        await notification_usecase.find_notification('non-existent-id')
+
+    assert str(error.value) == NotificationNotFoundError.message

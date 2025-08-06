@@ -1,9 +1,14 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from src.notification.entity import Notification
 from src.notification.enum import NotificationStatusEnum
+from src.notification.exception import NotificationNotFoundError
 from src.notification.repository import NotificationRepository
-from src.notification.schema import CreateNotificationInput, CreateNotificationOutput
+from src.notification.schema import (
+    CreateNotificationInput,
+    CreateNotificationOutput,
+    NotificationOutput,
+)
 from src.notification.service import NotificationService
 
 
@@ -36,4 +41,16 @@ class NotificationUsecase:
         await self.notification_service.send_notification(notification)
         return CreateNotificationOutput(
             trace_id=notification.trace_id, message_id=notification.message_id
+        )
+
+    async def find_notification(self, trace_id: UUID) -> NotificationOutput:
+        notification = await self.notification_repository.find(trace_id)
+        if notification is None:
+            raise NotificationNotFoundError
+        return NotificationOutput(
+            trace_id=notification.trace_id,
+            message_id=notification.message_id,
+            message_content=notification.message_content,
+            notification_type=notification.notification_type,
+            status=notification.status,
         )

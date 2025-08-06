@@ -9,3 +9,6 @@ class NotificationRepository:
 
     async def create(self, notification: Notification) -> None:
         self._notifications[notification.trace_id] = notification
+
+    async def find(self, trace_id: UUID) -> Notification | None:
+        return self._notifications.get(trace_id)

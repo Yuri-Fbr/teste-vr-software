@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.notification.enum import NotificationTypeEnum
+from src.notification.enum import NotificationStatusEnum, NotificationTypeEnum
 
 
 class CreateNotificationInput(BaseModel):
@@ -14,3 +14,11 @@ class CreateNotificationInput(BaseModel):
 class CreateNotificationOutput(BaseModel):
     trace_id: UUID
     message_id: UUID
+
+
+class NotificationOutput(BaseModel):
+    trace_id: UUID
+    message_id: UUID | None
+    message_content: str
+    notification_type: NotificationTypeEnum
+    status: NotificationStatusEnum

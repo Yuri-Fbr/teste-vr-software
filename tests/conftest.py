@@ -28,8 +28,8 @@ def notification_usecase(
 @pytest.fixture
 def notification() -> Notification:
     return Notification(
-        trace_id='550e8400-e29b-41d4-a716-446655440000',
-        message_id='550e8400-e29b-41d4-a716-446655440000',
+        trace_id='8b3e56f1-bb2b-47e3-a1c5-7384dc9b98a3',
+        message_id='8b3e56f1-bb2b-47e3-a1c5-7384dc9b98a3',
         message_content='Notification content example',
         notification_type=NotificationTypeEnum.EMAIL,
         status=NotificationStatusEnum.RECEIVED,

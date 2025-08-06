@@ -1,9 +1,14 @@
 from typing import Annotated
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, status
 
 from src.notification.repository import NotificationRepository
-from src.notification.schema import CreateNotificationInput, CreateNotificationOutput
+from src.notification.schema import (
+    CreateNotificationInput,
+    CreateNotificationOutput,
+    NotificationOutput,
+)
 from src.notification.service import NotificationService
 from src.notification.usecase import NotificationUsecase
 from src.settings.broker import broker_settings
@@ -25,3 +30,11 @@ async def create_notification(
     usecase: Annotated[NotificationUsecase, Depends(notification_usecase_factory)],
 ) -> CreateNotificationOutput:
     return await usecase.create_notification(input_data=input_data)
+
+
+@router.get('/status/{trace_id}', status_code=status.HTTP_200_OK)
+async def find_notification(
+    trace_id: UUID,
+    usecase: Annotated[NotificationUsecase, Depends(notification_usecase_factory)],
+) -> NotificationOutput:
+    return await usecase.find_notification(trace_id=trace_id)
