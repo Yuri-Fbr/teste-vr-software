@@ -15,19 +15,19 @@ class BrokerSettings(BaseSettings):
 
     @property
     def queue_input_name(self) -> str:
-        return 'fila.notificacao.entrada.ivarcarrera'
+        return 'fila.notificacao.entrada'
 
     @property
     def queue_retry_name(self) -> str:
-        return 'fila.notificacao.retry.ivarcarrera'
+        return 'fila.notificacao.retry'
 
     @property
     def queue_validation_name(self) -> str:
-        return 'fila.notificacao.validacao.ivarcarrera'
+        return 'fila.notificacao.validacao'
 
     @property
     def queue_dlq_name(self) -> str:
-        return 'fila.notificacao.dlq.ivarcarrera'
+        return 'fila.notificacao.dlq'
 
 
 broker_settings = BrokerSettings()
